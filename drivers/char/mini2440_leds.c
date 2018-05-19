@@ -52,9 +52,9 @@ static int sbc2440_leds_ioctl(
 		if (arg > 4) {
 			return -EINVAL;
 		}
-#if 0
+//#if 0
 		s3c2410_gpio_setpin(led_table[arg], !cmd);
-#endif
+//#endif
 		return 0;
 	default:
 		return -EINVAL;

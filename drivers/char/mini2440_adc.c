@@ -25,7 +25,7 @@
 #undef DEBUG
 //#define DEBUG
 #ifdef DEBUG
-#define DPRINTK(x...) {printk(__FUNCTION__"(%d): ",__LINE__);printk(x...);}
+#define DPRINTK(x...) {printk(__FUNCTION__"(%d): ",__LINE__);printk(##X);}
 #else
 #define DPRINTK(x...) (void)(0)
 #endif
@@ -126,6 +126,7 @@ static int s3c2410_adc_open(struct inode *inode, struct file *filp)
 
 static int s3c2410_adc_release(struct inode *inode, struct file *filp)
 {
+	up(&ADC_LOCK);
 	printk(KERN_DEBUG "adc closed\n");
 	return 0;
 }

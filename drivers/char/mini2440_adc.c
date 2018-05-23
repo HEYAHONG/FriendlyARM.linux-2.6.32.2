@@ -25,7 +25,7 @@
 #undef DEBUG
 //#define DEBUG
 #ifdef DEBUG
-#define DPRINTK(x...) {printk(__FUNCTION__"(%d): ",__LINE__);printk(##x);}
+#define DPRINTK(x...) {printk(__FUNCTION__"(%d): ",__LINE__);printk(x...);}
 #else
 #define DPRINTK(x...) (void)(0)
 #endif
@@ -94,7 +94,7 @@ static ssize_t s3c2410_adc_read(struct file *filp, char *buffer, size_t count, l
 
 		ev_adc = 0;
 
-		DPRINTK("AIN[%d] = 0x%04x, %d\n", adcdev.channel, adc_data, ADCCON & 0x80 ? 1:0);
+		printk(KERN_DEBUG "AIN[%d] = 0x%04x, %d\n", adcdev.channel, adc_data, (ADCCON & 0x80 ? 1:0));
 
 		value = adc_data;
 
@@ -120,13 +120,13 @@ static int s3c2410_adc_open(struct inode *inode, struct file *filp)
 	adcdev.channel=0;
 	adcdev.prescale=0xff;
 
-	DPRINTK( "adc opened\n");
+	printk(KERN_DEBUG "adc opened\n");
 	return 0;
 }
 
 static int s3c2410_adc_release(struct inode *inode, struct file *filp)
 {
-	DPRINTK( "adc closed\n");
+	printk(KERN_DEBUG "adc closed\n");
 	return 0;
 }
 
@@ -171,7 +171,7 @@ static int __init dev_init(void)
 	}
 
 	ret = misc_register(&misc);
-
+	up(&ADC_LOCK);
 	printk (DEVICE_NAME"\tinitialized\n");
 	return ret;
 }
